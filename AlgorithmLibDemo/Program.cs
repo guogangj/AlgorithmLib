@@ -1,8 +1,13 @@
 ﻿using AlgorithmLib;
 using System;
+using System.Runtime.InteropServices;
 
 namespace AlgorithmLibDemo {
     class Program {
+
+        static void SimplePrintArray<T>(T[] arr) {
+            Console.WriteLine(string.Join(", ", arr));
+        }
 
         //组合demo
         static void CombinationDemo() {
@@ -26,9 +31,20 @@ namespace AlgorithmLibDemo {
             });
         }
 
+        //数值分摊demo
+        static void NumberDivideDemo() {
+            SimplePrintArray(NumberDivideHelper.Divide(100, new[] {1m, 1.2m }, 2));
+            SimplePrintArray(NumberDivideHelper.Divide(10, new[] { 1m, 0m }, 2));
+            SimplePrintArray(NumberDivideHelper.Divide(10, new[] { 3m, 3m, 3m }, 2));
+            SimplePrintArray(NumberDivideHelper.Divide(10, new[] { 3m, 3m, 3m }, 0));
+            SimplePrintArray(NumberDivideHelper.Divide(10, new[] { 5m, 1m, 0.1m }, 0));
+            SimplePrintArray(NumberDivideHelper.Divide(10.1m, new[] { 5m, 1m, 0.1m }, 1));
+        }
+
         static void Main(string[] args) {
             //PermutationDemo();
-            CombinationDemo();
+            //CombinationDemo();
+            NumberDivideDemo();
         }
     }
 }

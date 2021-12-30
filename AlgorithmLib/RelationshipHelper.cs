@@ -9,61 +9,28 @@ namespace AlgorithmLib {
     public class RelationshipHelper {
 
         /// <summary>
-        /// 获取“旋转数组” [1,2,3,4]，按index为2旋转，就变成[3,4,1,2]
+        /// 根据index“旋转数组”并去掉第一个元素, 如[1,2,3,4], 按index为2, 就返回[4,1,2]
         /// </summary>
-        private static int[] GetRotatedArray(int[] array, int index) {
-            Debug.Assert(array != null && index < array.Length);
-            int[] newArray = new int[array.Length];
-            Array.Copy(array, index, newArray, 0, array.Length - index);
-            Array.Copy(array, 0, newArray, array.Length - index, index);
+        private static int[] RollArrayAndRemoveFirstByIndex(int[] array, int index) {
+            Debug.Assert(array != null && array.Length > 1 && index < array.Length && index >= 0);
+            int[] newArray = new int[array.Length - 1];
+            if (index < array.Length - 1) {
+                Array.Copy(array, index + 1, newArray, 0, array.Length - 1 - index);
+            }
+            if (index > 0) {
+                Array.Copy(array, 0, newArray, array.Length - index - 1, index);
+            }
             return newArray;
         }
 
         /// <summary>
-        /// 获取“子数组” [1,2,3,4]，按index为1截取，就变成[2,3,4]
+        /// 在数组头增加一个元素, 如[1,2,3,4]，加5，就返回[5,1,2,3,4]
         /// </summary>
-        private static int[] GetSubArray(int[] array, int index) {
-            Debug.Assert(array != null && index < array.Length);
-            int[] newArray = new int[array.Length - index];
-            Array.Copy(array, index, newArray, 0, array.Length - index);
-            return newArray;
-        }
-
-        private static int[] SubFindRelationship(int[] subOriginals, int[] subFragments) {
-            Debug.Assert(subOriginals.Any() && subFragments.Any());
-            if(subOriginals.Length > subFragments.Length) {
-                return null;
-            }
-            if (subOriginals.Length == 1 && subFragments.Length == 1) {
-                return subOriginals[0] == subFragments[0] ? subOriginals : null;
-            }
-
-            for (int i = 0; i < subFragments.Length; i++) {
-                if (subFragments[i] == subOriginals[0]) {
-                    int[] rotated = GetRotatedArray(subFragments, i);
-                    int[] res = SubFindRelationship(GetSubArray(subOriginals, 1),
-                        GetSubArray(rotated, 1));
-                    if (res != null) {
-                        int[] newRes = new int[res.Length+1];
-                        newRes[0] = subFragments[i];
-                        Array.Copy(res, 0, newRes, 1, res.Length);
-                        return newRes;
-                    }
-                }
-                else if(subFragments[i]<subOriginals[0]) {
-                    int[] rotated = GetRotatedArray(subFragments, i);
-                    int[] newSubOriginals = GetSubArray(subOriginals, 0);
-                    newSubOriginals[0] -= subFragments[i];
-                    int[] res = SubFindRelationship(newSubOriginals, GetSubArray(rotated, 1));
-                    if(res!=null) {
-                        int[] newRes = new int[res.Length + 1];
-                        newRes[0] = subFragments[i];
-                        Array.Copy(res, 0, newRes, 1, res.Length);
-                        return newRes;
-                    }
-                }
-            }
-            return null;
+        private static int[] PrependElementToArray(int[] array, int prependValue) {
+            int[] newRes = new int[array.Length + 1];
+            newRes[0] = prependValue;
+            Array.Copy(array, 0, newRes, 1, array.Length);
+            return newRes;
         }
 
         /// <summary>
@@ -79,7 +46,34 @@ namespace AlgorithmLib {
             if (originals == null || fragments == null || originals.Sum() != fragments.Sum() || fragments.Length < originals.Length) {
                 return null;
             }
-            return SubFindRelationship(originals, fragments);
+
+            int[] SubFindRelationship(int currOriginalIdx, int matchedValForCurrOrgIdx,  int[] subFragments) {
+                Debug.Assert(currOriginalIdx < originals.Length && subFragments.Any());
+                if (originals.Length-currOriginalIdx > subFragments.Length) {
+                    return null;
+                }
+                if (originals.Length - currOriginalIdx == 1 && subFragments.Length == 1) {
+                    return matchedValForCurrOrgIdx + subFragments[0]== originals[currOriginalIdx] ? subFragments : null;
+                }
+
+                for (int i = 0; i < subFragments.Length; i++) {
+                    if (matchedValForCurrOrgIdx + subFragments[i] == originals[currOriginalIdx]) {
+                        int[] res = SubFindRelationship(currOriginalIdx+1, 0, RollArrayAndRemoveFirstByIndex(subFragments, i));
+                        if (res != null) {
+                            return PrependElementToArray(res, subFragments[i]);
+                        }
+                    }
+                    else if (matchedValForCurrOrgIdx + subFragments[i] < originals[currOriginalIdx]) {
+                        int[] res = SubFindRelationship(currOriginalIdx, matchedValForCurrOrgIdx + subFragments[i], RollArrayAndRemoveFirstByIndex(subFragments, i));
+                        if (res != null) {
+                            return PrependElementToArray(res, subFragments[i]);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            return SubFindRelationship(0, 0, fragments);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AlgorithmLib;
 using System;
+using System.Diagnostics;
 
 namespace AlgorithmLibDemo {
     class Program {
@@ -10,23 +11,34 @@ namespace AlgorithmLibDemo {
 
         //组合demo
         static void CombinationDemo() {
-            char[] arr = new char[] { 'a', 'b', 'c', 'd' };
-            CombinationHelper.Combination1(arr, 2, 3, res => {
-                foreach (char c in res) {
-                    Console.Write(c + " ");
-                }
-                Console.WriteLine();
+            char[] arr = new char[] {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+
+            CombinationHelper.Method = CombinationMethod.FlagDrift;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            CombinationHelper.Combination(arr, 3, res => {
+                SimplePrintArray(res);
+                return true;
             });
+            sw.Stop();
+            Console.WriteLine($"标志位选择法耗时: {sw.ElapsedMilliseconds} ms");
+
+            CombinationHelper.Method = CombinationMethod.Backtrack;
+            sw.Restart();
+            CombinationHelper.Combination(arr, 3, res => {
+                SimplePrintArray(res);
+                return true;
+            });
+            sw.Stop();
+            Console.WriteLine($"回溯法耗时: {sw.ElapsedMilliseconds} ms");
         }
 
         //排列demo
         static void PermutationDemo() {
-            char[] arr = new char[] { 'a', 'b', 'c', 'd' };
-            PermutationHelper.Permutation1(arr, 2, 3, res => {
-                foreach (char c in res) {
-                    Console.Write(c + " ");
-                }
-                Console.WriteLine();
+            int[] arr = new int[] { 1, 2, 3, 4 };
+            PermutationHelper.Permutation(arr, 2, 4, res => {
+                SimplePrintArray(res);
+                return true;
             });
         }
 
@@ -44,13 +56,15 @@ namespace AlgorithmLibDemo {
         static void FindRelationDemo() {
             //int[] originals = new[] { 8, 13, 2 };
             //int[] fragments = new[] { 7, 5, 3, 2, 6 };
-            int[] originals = new[] { 23, 16, 4, 8, 15, 7 };
-            int[] fragments = new[] { 3, 3, 1, 7, 14, 8, 17, 1, 7, 4, 3, 1, 3, 1 };
+            //int[] originals = new[] { 23, 16, 4, 8, 15, 7 };
+            //int[] fragments = new[] { 3, 3, 1, 7, 14, 8, 17, 1, 7, 4, 3, 1, 3, 1 };
+            int[] originals = new[] { 3, 5 };
+            int[] fragments = new[] { 2, 4, 1, 1 };
+            //int[] originals = new[] { 7, 13, 6, 99, 24, 16, 35 };
+            //int[] fragments = new[] { 11, 9, 50, 13, 3,6, 30, 11, 7, 5, 4, 11, 2, 5, 9, 24};
             int[] res = RelationshipHelper.FindRelationship(originals, fragments);
             if (res != null) {
-                foreach (int i in res) {
-                    Console.Write(" " + i);
-                }
+                SimplePrintArray(res);
             }
         }
 

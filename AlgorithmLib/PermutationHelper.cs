@@ -1,7 +1,10 @@
 ﻿using System;
 
 namespace AlgorithmLib {
-    public class PermutationHelper {
+    /// <summary>
+    /// 排列算法类
+    /// </summary>
+    public static class PermutationHelper {
         /// <summary>
         /// 排列算法(全排列)
         /// </summary>

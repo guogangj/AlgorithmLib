@@ -68,11 +68,41 @@ namespace AlgorithmLibDemo {
             }
         }
 
+        //洗牌，随机取值demo
+        static void ShuffleDemo() {
+            //洗牌10次
+            for(int i=0; i<10; i++) {
+                char[] arr = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                ShuffleHelper.Shuffle(arr);
+                SimplePrintArray(arr);
+            }
+
+            //随机取下标
+            for (int i = 0; i < 10; i++) {
+                int[] arr = ShuffleHelper.RandomGet(10, 5);
+                SimplePrintArray(arr);
+            }
+
+            //随机取值
+            char[] arrAlpha = { 'a', 'b', 'c', 'd', 'e', 'f', 'g' };
+            for (int i = 0; i < 10; i++) {
+                char[] arr = ShuffleHelper.RandomGet(arrAlpha, 3);
+                SimplePrintArray(arr);
+            }
+
+            //边界测试
+            char[] res = ShuffleHelper.RandomGet(arrAlpha, 0);
+            Debug.Assert(res.Length==0);
+            res = ShuffleHelper.RandomGet(arrAlpha, 7);
+            SimplePrintArray(res);
+        }
+
         static void Main(string[] args) {
             //PermutationDemo();
             //CombinationDemo();
             //NumberDivideDemo();
-            FindRelationDemo();
+            //FindRelationDemo();
+            ShuffleDemo();
         }
     }
 }

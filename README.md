@@ -186,3 +186,27 @@ int[] fragments = new[] { 2, 4, 1, 1 };
 int[] res = RelationshipHelper.FindRelationship(originals, fragments);
 // res为 [2, 1, 1, 4]
 ```
+
+如果组合关系匹配失败，将会返回null
+## 洗牌和随机取值
+
+### 随机打乱一个数组
+
+```
+char[] arr = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+ShuffleHelper.Shuffle(arr);
+// 数组arr被随机打乱，如：'3', '0', '9', '5', '8', '6', '2', '1', '4', '7'
+```
+
+### 随机从一个数组中取出N个下标
+```
+int[] arr = ShuffleHelper.RandomGet(10, 5);
+// arr为0-9的随机下标，如：3, 6, 4, 9, 1
+```
+
+### 随机从一个数组中取出N个值
+```
+char[] arrAlpha = { 'a', 'b', 'c', 'd', 'e', 'f', 'g' };
+char[] arr = ShuffleHelper.RandomGet(arrAlpha, 3);
+// arr为arrAlpha中的随机的3个元素，如：'d', 'f', 'b'
+```

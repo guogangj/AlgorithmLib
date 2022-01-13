@@ -15,9 +15,7 @@ namespace AlgorithmLib {
         public static void Shuffle<T>(T[] arr) {
             for (int i = 0; i < arr.Length; i++) {
                 int idx = _random.Next(arr.Length);
-                T tmp = arr[i];
-                arr[i] = arr[idx];
-                arr[idx] = tmp;
+                (arr[i], arr[idx]) = (arr[idx], arr[i]);
             }
         }
 

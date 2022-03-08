@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -47,18 +48,22 @@ namespace AlgorithmLib {
                 return null;
             }
 
-            int[] SubFindRelationship(int currOriginalIdx, int matchedValForCurrOrgIdx,  int[] subFragments) {
+            int[] SubFindRelationship(int currOriginalIdx, int matchedValForCurrOrgIdx, int[] subFragments) {
                 Debug.Assert(currOriginalIdx < originals.Length && subFragments.Any());
-                if (originals.Length-currOriginalIdx > subFragments.Length) {
+                if (originals.Length - currOriginalIdx > subFragments.Length) {
                     return null;
                 }
                 if (originals.Length - currOriginalIdx == 1 && subFragments.Length == 1) {
-                    return matchedValForCurrOrgIdx + subFragments[0]== originals[currOriginalIdx] ? subFragments : null;
+                    return matchedValForCurrOrgIdx + subFragments[0] == originals[currOriginalIdx] ? subFragments : null;
                 }
-
+                HashSet<int> hash = new HashSet<int>();
                 for (int i = 0; i < subFragments.Length; i++) {
+                    if(hash.Contains(subFragments[i])) {
+                        continue;
+                    }
+                    hash.Add(subFragments[i]);
                     if (matchedValForCurrOrgIdx + subFragments[i] == originals[currOriginalIdx]) {
-                        int[] res = SubFindRelationship(currOriginalIdx+1, 0, RollArrayAndRemoveFirstByIndex(subFragments, i));
+                        int[] res = SubFindRelationship(currOriginalIdx + 1, 0, RollArrayAndRemoveFirstByIndex(subFragments, i));
                         if (res != null) {
                             return PrependElementToArray(res, subFragments[i]);
                         }

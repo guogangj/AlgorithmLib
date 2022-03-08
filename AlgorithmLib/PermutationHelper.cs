@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AlgorithmLib {
     /// <summary>
@@ -11,9 +12,10 @@ namespace AlgorithmLib {
         /// </summary>
         /// <param name="arr">要进行排列的数组</param>
         /// <param name="callback">回调方法</param>
-        public static void Permutation<T>(T[] arr, Func<T[], bool> callback) {
+        /// <param name="removeDuplicates">是否去除重复结果，默认是(用GetHashCode判断元素是否重复)</param>
+        public static void Permutation<T>(T[] arr, Func<T[], bool> callback, bool removeDuplicates = false) {
             for (int n = 1; n <= arr.Length; n++) {
-                if (!_Permutation(arr, n, callback)) {
+                if (!_Permutation(arr, n, callback, removeDuplicates)) {
                     return;
                 }
             }
@@ -26,9 +28,10 @@ namespace AlgorithmLib {
         /// <param name="n1">排列结果取n1个数</param>
         /// <param name="n2">到取n2个数</param>
         /// <param name="callback">回调方法</param>
-        public static void Permutation<T>(T[] arr, int n1, int n2, Func<T[], bool> callback) {
+        /// <param name="removeDuplicates">是否去除重复结果，默认是(用GetHashCode判断元素是否重复)</param>
+        public static void Permutation<T>(T[] arr, int n1, int n2, Func<T[], bool> callback, bool removeDuplicates = false) {
             for (int n = n1; n <= n2; n++) {
-                if (!_Permutation(arr, n, callback)) {
+                if (!_Permutation(arr, n, callback, removeDuplicates)) {
                     return;
                 }
             }
@@ -41,11 +44,12 @@ namespace AlgorithmLib {
         /// <param name="n">排列结果取多少个元素</param>
         /// <param name="callback">回调方法</param>
         /// <returns>true为正常结束，false为中断</returns>
-        public static void Permutation<T>(T[] arr, int n, Func<T[], bool> callback) {
-            _Permutation(arr, n, callback);
+        /// <param name="removeDuplicates">是否去除重复结果，默认是(用GetHashCode判断元素是否重复)</param>
+        public static void Permutation<T>(T[] arr, int n, Func<T[], bool> callback, bool removeDuplicates = false) {
+            _Permutation(arr, n, callback, removeDuplicates);
         }
 
-        private static bool _Permutation<T>(T[] arr, int n, Func<T[], bool> callback) {
+        private static bool _Permutation<T>(T[] arr, int n, Func<T[], bool> callback, bool removeDuplicates) {
 
             bool SubPermutation(int len, int start) {
                 if (len == 0) {
@@ -53,7 +57,14 @@ namespace AlgorithmLib {
                     Array.Copy(arr, onePerm, start);
                     return callback(onePerm);
                 }
+                HashSet<T> hash = removeDuplicates ? new HashSet<T>() : null;
                 for (int i = start; i < arr.Length; i++) {
+                    if (hash != null) {
+                        if (hash.Contains(arr[i])) { //避免重复排列
+                            continue;
+                        }
+                        hash.Add(arr[i]);
+                    }
                     T tmp = arr[i];
                     arr[i] = arr[start];
                     arr[start] = tmp;

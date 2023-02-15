@@ -80,5 +80,37 @@ namespace AlgorithmLib {
 
             return SubFindRelationship(0, 0, fragments);
         }
+
+        /// <summary>
+        /// 找出能够合成整体的碎片集（这相当于是FindRelationship的“局部版”）
+        /// </summary>
+        /// <param name="whole">整体</param>
+        /// <param name="fragmentgs">碎片源</param>
+        /// <returns>返回null表示找不到合适的</returns>
+        public static int[] FindFragments(int whole, int[] fragments) {
+            int[] SubFindFragments(int subWhole, int[] subFragments) {
+                if (subFragments.Length == 1) {
+                    return subWhole == subFragments[0] ? subFragments : null;
+                }
+                HashSet<int> hash = new HashSet<int>();
+                for(int i=0; i<subFragments.Length; i++) {
+                    if (hash.Contains(subFragments[i])) {
+                        continue;
+                    }
+                    hash.Add(subFragments[i]);
+                    if (subWhole == subFragments[i]) {
+                        return new int[] { subFragments[i] };
+                    }
+                    else if (subWhole > subFragments[i]) {
+                        int[] res = SubFindFragments(subWhole - subFragments[i], RollArrayAndRemoveFirstByIndex(subFragments, i));
+                        if(res != null) {
+                            return PrependElementToArray(res, subFragments[i]);
+                        }
+                    }
+                }
+                return null;
+            }
+            return SubFindFragments(whole, fragments);
+        }
     }
 }

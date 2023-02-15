@@ -226,3 +226,14 @@ char[] arrAlpha = { 'a', 'b', 'c', 'd', 'e', 'f', 'g' };
 char[] arr = ShuffleHelper.RandomGet(arrAlpha, 3);
 // arr为arrAlpha中的随机的3个元素，如：'d', 'f', 'b'
 ```
+
+## 数组位移
+
+数组的位移就是直接根据需求挪动数组的元素。如数组```[1,2,3,4,5]```的```[2,3]```子数组向右挪1个位置，数组就变成了```[1,4,2,3,5]```。
+
+注： 如果越界，会抛出```IndexOutOfRangeException```异常。
+```
+int[] arr = new int[]{1,2,3,4,5,6,7,8,9};
+ArrayHelper.ShiftArrayItems(arr, 7, 3, -5); //-5表示左移5位
+// arr为 [0, 1, 7, 8, 9, 2, 3, 4, 5, 6]
+```

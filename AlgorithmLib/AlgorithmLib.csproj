@@ -7,8 +7,18 @@
     <Authors>Jiang Guogang</Authors>
     <Company></Company>
     <Description>一些常用的算法</Description>
-    <RepositoryUrl>https://github.com/guogangj/AlgorithmLib</RepositoryUrl>
+    <RepositoryUrl>https://github.com/guogangj/AlgorithmLib.git</RepositoryUrl>
     <PackageReleaseNotes>改进了关系匹配算法，给排列算法增加了一个去除重复选项</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/guogangj/AlgorithmLib</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

@@ -106,6 +106,11 @@ class Demos {
         PrintDivInfo();
         Utils.SimplePrintArray(NumberDivideHelper.Divide(toDivide, ratioArray, decimalNum));
 
+        toDivide = 3131;
+        ratioArray = new[] { 1m, 1m, 1m };
+        decimalNum = 3;
+        PrintDivInfo();
+        Utils.SimplePrintArray(NumberDivideHelper.Divide(toDivide, ratioArray, decimalNum));
 
         toDivide = 10.1m;
         ratioArray = new[] { 5m, 1m, 0.1m };
@@ -118,7 +123,6 @@ class Demos {
             Console.WriteLine("出错了: " + ex.Message);
         }
     }
-
 
     /// <summary>
     /// 找出关系DEMO

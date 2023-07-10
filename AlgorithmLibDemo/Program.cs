@@ -15,13 +15,6 @@ class Program {
 
 
     static void Main(string[] args) {
-        //PermutationDemo();
-        //CombinationDemo();
-        //NumberDivideDemo();
-        //FindRelationDemo();
-        //FindFragments();
-        //ShuffleDemo();
-        //ShiftArrayItemsDemo();
 
         DemoItem[] demoItems = new DemoItem[] {
             new DemoItem {Fun = Demos.PermutationDemo, Desc = "排列DEMO"},
@@ -29,10 +22,10 @@ class Program {
             new DemoItem {Fun = Demos.NumberDivideDemo, Desc = "数值比例分摊DEMO"},
             new DemoItem {Fun = Demos.FindRelationDemo, Desc = "找出关系DEMO"},
             new DemoItem {Fun = Demos.FindFragmentsDemo, Desc = "找出构成整体的碎片集DEMO"},
+            new DemoItem {Fun = Demos.FindFragmentsDemo2, Desc = "找出构成整体的碎片集DEMO(对象处理)"},
             new DemoItem {Fun = Demos.ShuffleDemo, Desc = "洗牌，随机取值DEMO"},
             new DemoItem {Fun = Demos.ShiftArrayItemsDemo, Desc = "数组元素位移DEMO"}
         };
-
 
         void PrintMenu() {
             Console.WriteLine("Please choose the DEMO you want to run:");

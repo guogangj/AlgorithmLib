@@ -190,6 +190,87 @@ int[] res = RelationshipHelper.FindFragments(whole, fragments);
 // res为 [4, 4, 8, 1]
 ```
 
+### 找出构成整体的碎片集（对象处理）
+
+这是**找出构成整体的碎片集**的附加功能版本。在企业开发中，我们常常需要建立对应关系，即若干个碎片加起来等于整体，找到这种关系后把碎片对象的一个字段设置为整体的ID，以此建立对应关系。
+
+```
+/// <summary>
+/// 明细对象（碎片）
+/// </summary>
+class BillLine {
+    /// <summary>
+    /// 明细ID
+    /// </summary>
+    public int LineId { get; set; }
+    /// <summary>
+    /// 明细值
+    /// </summary>
+    public int LineValue { get; set; }
+    /// <summary>
+    /// 所属主档ID（这是想要的结果）
+    /// </summary>
+    public int MasterId { get; set; }
+}
+
+/// <summary>
+/// 主档对象（整体）
+/// </summary>
+class MasterBill {
+    /// <summary>
+    /// 主档ID
+    /// </summary>
+    public int MasterId { get; set; }
+    /// <summary>
+    /// 主档值
+    /// </summary>
+    public int MasterValue { get; set; }
+}
+
+BillLine[] detailList = new BillLine[] {
+    new BillLine{LineId = 1001, LineValue = 16},
+    new BillLine{LineId = 1002, LineValue = 11},
+    new BillLine{LineId = 1003, LineValue = 13},
+    new BillLine{LineId = 1008, LineValue = 28},
+    new BillLine{LineId = 1009, LineValue = 28},
+    new BillLine{LineId = 1010, LineValue = 28},
+    new BillLine{LineId = 1011, LineValue = 28},
+    new BillLine{LineId = 1012, LineValue = 28},
+};
+
+MasterBill[] masterList = new MasterBill[] {
+    new MasterBill{MasterId = 2001, MasterValue = 80},
+    new MasterBill{MasterId = 2002, MasterValue = 100}
+};
+
+RelationshipHelper.MakeRelationShip(
+    masterList,                    //整体列表
+    detailList,                    //碎片列表
+    t1 => t1.MasterId,             //获取整体ID的方法
+    t1 => t1.MasterValue,          //获取整体的值的方法
+    t2 => t2.LineValue,            //获取碎片的值的方法
+    (t2, id) => t2.MasterId = id); //将结果ID
+```
+结果：
+
+整体
+| ID | 值 |
+|----|----|
+|2001|80  |
+|2002|100 |
+
+碎片
+| ID |值|关联整体ID|
+|----|--|----|
+|1001|16|2002|
+|1002|11|2001|
+|1003|13|2001|
+|1008|28|2001|
+|1009|28|2001|
+|1010|28|2002|
+|1011|28|2002|
+|1012|28|2002|
+
 ### 找出多值组合关系
 
 这其实是**找出构成整体的碎片集**的变化版本。在企业开发中，常常遇到这样的问题，把原先的一些记录(原始)拆分成若干更多的记录(碎片)，而我们要建立碎片和原始之间的对应关系，例如给出"原始"：```8,13,2```, 给出"碎片：```7,5,3,2,6```, 我们需要获得的结果是```5,3,6,7,2```, 因为```5+3=8, 6+7=13, 2=2```。

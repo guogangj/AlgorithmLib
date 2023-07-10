@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <PackageId>AlgorithmLib</PackageId>
     <Authors>Jiang Guogang</Authors>
     <Company></Company>
     <Description>一些常用的算法</Description>
     <RepositoryUrl>https://github.com/guogangj/AlgorithmLib.git</RepositoryUrl>
-    <PackageReleaseNotes>改进了关系匹配算法，给排列算法增加了一个去除重复选项</PackageReleaseNotes>
+    <PackageReleaseNotes>增加了RelationshipHelper.MakeRelationShip方法，用于处理整体对象和碎片对象的关联关系</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/guogangj/AlgorithmLib</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>

@@ -4,6 +4,38 @@ using System.Diagnostics;
 
 namespace AlgorithmLibDemo;
 
+/// <summary>
+/// 明细对象（碎片）
+/// </summary>
+class BillLine {
+    /// <summary>
+    /// 明细ID
+    /// </summary>
+    public int LineId { get; set; }
+    /// <summary>
+    /// 明细值
+    /// </summary>
+    public int LineValue { get; set; }
+    /// <summary>
+    /// 所属主档ID（这是想要的结果）
+    /// </summary>
+    public int MasterId { get; set; }
+}
+
+/// <summary>
+/// 主档对象（整体）
+/// </summary>
+class MasterBill {
+    /// <summary>
+    /// 主档ID
+    /// </summary>
+    public int MasterId { get; set; }
+    /// <summary>
+    /// 主档值
+    /// </summary>
+    public int MasterValue { get; set; }
+}
+
 class Demos {
 
     /// <summary>
@@ -71,7 +103,7 @@ class Demos {
     /// 数值比例分摊DEMO
     /// </summary>
     public static void NumberDivideDemo() {
-        
+
         decimal toDivide = 100;
         decimal[] ratioArray = new[] { 1m, 1.2m };
         int decimalNum = 2;
@@ -95,7 +127,7 @@ class Demos {
         Utils.SimplePrintArray(NumberDivideHelper.Divide(toDivide, ratioArray, decimalNum));
 
         toDivide = 10;
-        ratioArray = new[] { 3m, 3m, 3m};
+        ratioArray = new[] { 3m, 3m, 3m };
         decimalNum = 0;
         PrintDivInfo();
         Utils.SimplePrintArray(NumberDivideHelper.Divide(toDivide, ratioArray, decimalNum));
@@ -119,7 +151,7 @@ class Demos {
         try {
             Utils.SimplePrintArray(NumberDivideHelper.Divide(toDivide, ratioArray, decimalNum));
         }
-        catch(ArgumentException ex) { 
+        catch (ArgumentException ex) {
             Console.WriteLine("出错了: " + ex.Message);
         }
     }
@@ -134,7 +166,7 @@ class Demos {
         void PrintTestResult() {
             Utils.SimplePrintArray(originals, $"\n原始组: ");
             Utils.SimplePrintArray(fragments, $"碎片组: ");
-            if(res!= null) {
+            if (res != null) {
                 Utils.SimplePrintArray(res, $"结果: ");
             }
             else {
@@ -154,7 +186,7 @@ class Demos {
         PrintTestResult();
 
         originals = new[] { 7, 13, 6, 99, 24, 16, 35 };
-        fragments = new[] { 11, 9, 50, 13, 3,6, 30, 11, 7, 5, 4, 11, 2, 5, 9, 24};
+        fragments = new[] { 11, 9, 50, 13, 3, 6, 30, 11, 7, 5, 4, 11, 2, 5, 9, 24 };
         res = RelationshipHelper.FindRelationship(originals, fragments);
         PrintTestResult();
 
@@ -165,6 +197,11 @@ class Demos {
 
         originals = new[] { 8, 7, 12 };
         fragments = new[] { 6, 4, 9, 3, 5 };
+        res = RelationshipHelper.FindRelationship(originals, fragments);
+        PrintTestResult();
+
+        originals = new[] { 73, 71, 77, 32 };
+        fragments = new[] { 77, 32, 73, 71 };
         res = RelationshipHelper.FindRelationship(originals, fragments);
         PrintTestResult();
     }
@@ -200,6 +237,63 @@ class Demos {
     }
 
     /// <summary>
+    /// 找出构成整体的碎片集DEMO(对象处理)
+    /// </summary>
+    public static void FindFragmentsDemo2() {
+
+        BillLine[] detailList = new BillLine[]{
+            new BillLine { LineId = 1001, LineValue = 1 },
+            new BillLine { LineId = 1002, LineValue = 2 }
+        };
+        MasterBill[] masterList = new MasterBill[] {
+            new MasterBill { MasterId = 2002, MasterValue = 1 },
+            new MasterBill { MasterId = 2001, MasterValue = 2 }
+        };
+
+        RelationshipHelper.MakeRelationShip<MasterBill, BillLine, int>(masterList,
+            detailList,
+            t1 => t1.MasterId,
+            t1 => t1.MasterValue,
+            t2 => t2.LineValue,
+            (t2, alid) => t2.MasterId = alid);
+
+        void PrintResult() {
+            Console.WriteLine("==========================");
+            foreach (MasterBill asnLine in masterList) {
+                Console.WriteLine(asnLine.MasterId + " " + asnLine.MasterValue);
+            }
+            Console.WriteLine("---------------");
+            foreach (BillLine decLine in detailList) {
+                Console.WriteLine(decLine.LineId + " " + decLine.LineValue + " " + decLine.MasterId);
+            }
+        }
+
+        PrintResult();
+
+        detailList = new BillLine[] {
+            new BillLine{LineId = 1001, LineValue = 16},
+            new BillLine{LineId = 1002, LineValue = 11},
+            new BillLine{LineId = 1003, LineValue = 13},
+            new BillLine{LineId = 1008, LineValue = 28},
+            new BillLine{LineId = 1009, LineValue = 28},
+            new BillLine{LineId = 1010, LineValue = 28},
+            new BillLine{LineId = 1011, LineValue = 28},
+            new BillLine{LineId = 1012, LineValue = 28},
+        };
+        masterList = new MasterBill[] {
+            new MasterBill{MasterId = 2001, MasterValue = 80},
+            new MasterBill{MasterId = 2002, MasterValue = 100}
+        };
+        RelationshipHelper.MakeRelationShip(masterList,
+            detailList,
+            t1 => t1.MasterId,
+            t1 => t1.MasterValue,
+            t2 => t2.LineValue,
+            (t2, alid) => t2.MasterId = alid);
+        PrintResult();
+    }
+
+    /// <summary>
     /// 洗牌，随机取值DEMO
     /// </summary>
     public static void ShuffleDemo() {
@@ -210,7 +304,6 @@ class Demos {
             ShuffleHelper.Shuffle(arr);
             Utils.SimplePrintArray(arr, "结果: ");
         }
-
 
         //随机取下标
         Console.WriteLine("\n随机取数组下标10次,只需要告知数组长度(10)和要取的下标数(5),无需提供数组对象");

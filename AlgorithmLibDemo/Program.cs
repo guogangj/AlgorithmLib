@@ -12,7 +12,7 @@ class Program {
         public DemoFun Fun { get; set; }
         public string Desc { get; set; }
     }
-
+    
 
     static void Main(string[] args) {
 
